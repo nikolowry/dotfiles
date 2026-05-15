@@ -17,9 +17,12 @@ compinit
 # Zprezto
 . "$HOME/.zpreztorc"
 
+[[ -s "$HOME/.zprezto/init.zsh" ]] &&
+    source "$HOME/.zprezto/init.zsh"
+
 # openclaw completions
-[[ -f "$HOME/.openclaw/completions/openclaw.zsh" ]] \
-    && source "$HOME/.openclaw/completions/openclaw.zsh"
+[[ -s "$HOME/.openclaw/completions/openclaw.zsh" ]] &&
+    source "$HOME/.openclaw/completions/openclaw.zsh"
 
 # Write to ~/.last_dir whenever the directory changes
 chpwd() {

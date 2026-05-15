@@ -1,0 +1,23 @@
+# shellcheck shell=bash
+# ~/.bashrc
+
+# Default terminal
+if command -v ghostty &>/dev/null; then
+    export TERMINAL="ghostty"
+    export TERMINAL_ARG="-e"
+fi
+
+# Vim default text editor
+export VISUAL=nvim
+export EDITOR=nvim
+
+# Ensure proper char encoding
+export LC_ALL=$LANG
+
+# Load all local functions and env shell scripts
+# Using a while loop with -print0 safely handles file paths with spaces
+while IFS= read -r -d '' f; do
+    # shellcheck source=/dev/null
+    source "$f"
+done < <(find "$HOME/.shell/functions" "$HOME/.shell/env" \
+    -type f -name '*.sh' -print0 2>/dev/null)

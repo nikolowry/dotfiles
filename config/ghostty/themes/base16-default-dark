@@ -1,0 +1,26 @@
+# Base16 Default Dark for Ghostty
+background = 181818
+foreground = d8d8d8
+cursor-color = d8d8d8
+selection-background = 383838
+selection-foreground = d8d8d8
+
+# Standard Base16 Colors
+palette = 0=#181818
+palette = 1=#ab4642
+palette = 2=#a1b56c
+palette = 3=#f7ca88
+palette = 4=#7cafc2
+palette = 5=#ba8baf
+palette = 6=#86c1b9
+palette = 7=#d8d8d8
+
+# Distinct Bright Variants (For LazyGit & CLI Hashing)
+palette = 8=#585858
+palette = 9=#dc9656
+palette = 10=#b8cc83
+palette = 11=#ffe19f
+palette = 12=#93c6d9
+palette = 13=#d1a2c6
+palette = 14=#9dd8d0
+palette = 15=#f8f8f8

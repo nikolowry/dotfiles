@@ -1,0 +1,36 @@
+[include]
+    path = ~/.gitconfig_local
+[commit]
+    gpgsign = true
+[color]
+    ui = true
+[filter "lfs"]
+    clean = git-lfs clean -- %f
+    smudge = git-lfs smudge -- %f
+    required = true
+    process = git-lfs filter-process
+[pager]
+    diff = diff-so-fancy | less --tabs=1,5 -RFX
+    show = diff-so-fancy | less --tabs=1,5 -RFX
+[url "https://aur.archlinux.org/"]
+    insteadOf = "aur:"
+[help]
+    autocorrect = 1
+[pull]
+    rebase = false
+[core]
+	excludesfile = ~/.gitignore_global
+[init]
+	defaultBranch = main
+[alias]
+    # Discard any unstaged local changes
+    discard = !git checkout -- . && git clean -df
+
+    # Pretty Git Logs
+    visualize = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''        %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
+
+    # Uncommit, reset to head but keep file changes to be restaged
+    uncommit = reset --mixed HEAD~1
+
+    # Purge all local branches that have been deleted from the remote (protecting master/dev/stage)
+    purge = !git fetch --all -p && branches=$(git branch -vv | awk '/: gone\\]/ && !/\\*/ && !/(master|main|dev|stage)/ {print $1}') && if [ -n \"$branches\" ]; then echo \"$branches\" | xargs git branch -D; fi

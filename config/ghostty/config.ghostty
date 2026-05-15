@@ -1,0 +1,12 @@
+background-opacity = 0.9
+font-thicken = true
+gtk-titlebar-style = tabs
+keybind = ctrl+shift+c=copy_to_clipboard:plain
+macos-titlebar-style=tabs
+palette-generate = false
+term = xterm-256color
+theme = base16-default-dark
+window-padding-balance = true
+window-padding-x = 8
+window-padding-y = 8
+window-decoration = auto

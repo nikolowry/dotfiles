@@ -1,0 +1,33 @@
+# Lines configured by zsh-newuser-install
+HISTFILE=~/.histfile
+HISTSIZE=1000
+SAVEHIST=1000
+bindkey -e
+
+# End of lines configured by zsh-newuser-install
+# The following lines were added by compinstall
+zstyle :compinstall filename $HOME/.zshrc
+autoload -Uz compinit
+compinit
+# End of lines added by compinstall
+
+# Bash
+. "$HOME/.bashrc"
+
+# Zprezto
+. "$HOME/.zpreztorc"
+
+# openclaw completions
+[[ -f "$HOME/.openclaw/completions/openclaw.zsh" ]] \
+    && source "$HOME/.openclaw/completions/openclaw.zsh"
+
+# Write to ~/.last_dir whenever the directory changes
+chpwd() {
+    pwd >! "$HOME/.last_dir"
+}
+
+# Read and restore the directory on startup
+if [[ -f "$HOME/.last_dir" ]]; then
+    last_dir="$(cat "$HOME/.last_dir")"
+    [[ -n "$last_dir" && -d "$last_dir" ]] && cd "$last_dir"
+fi

@@ -1,0 +1,23 @@
+{
+  "blink.cmp": { "branch": "main", "commit": "78336bc89ee5365633bcf754d93df01678b5c08f" },
+  "codecompanion.nvim": { "branch": "main", "commit": "270e5d713f4d35c31e89d91d46c18aa67b05694f" },
+  "conform.nvim": { "branch": "master", "commit": "0451b96660e8ca7dd8897718bad63932cf59255a" },
+  "gitsigns.nvim": { "branch": "main", "commit": "dd3f588bacbeb041be6facf1742e42097f62165d" },
+  "lazy.nvim": { "branch": "main", "commit": "306a05526ada86a7b30af95c5cc81ffba93fef97" },
+  "lazydev.nvim": { "branch": "main", "commit": "ff2cbcba459b637ec3fd165a2be59b7bbaeedf0d" },
+  "lspsaga.nvim": { "branch": "main", "commit": "3e33a6a6c5d379f3d4fae77fae6b53b762a0a30f" },
+  "lualine.nvim": { "branch": "master", "commit": "131a558e13f9f28b15cd235557150ccb23f89286" },
+  "luvit-meta": { "branch": "main", "commit": "cc9b2d412d2fbd30b94a70cfc214c2a3be27a0a2" },
+  "mason.nvim": { "branch": "main", "commit": "8e921c2b68571e978db5d4d3fef9c9a7f8755473" },
+  "mini.pairs": { "branch": "main", "commit": "30cf2f01c4aaa2033db67376b9924fa2442c05d6" },
+  "mini.surround": { "branch": "main", "commit": "990ce30f724d08e79670107de6b915a3f1bb9a9b" },
+  "nvim-base16": { "branch": "master", "commit": "23e5128eb5f629c29532c24a1e733cbe019f05bb" },
+  "nvim-highlight-colors": { "branch": "main", "commit": "e4c7af0211866162d999ce0bdd6a029302e19139" },
+  "nvim-lint": { "branch": "master", "commit": "665525810630701b84181e4d9eefd24b49845b29" },
+  "nvim-ts-context-commentstring": { "branch": "main", "commit": "6141a40173c6efa98242dc951ed4b6f892c97027" },
+  "nvim-web-devicons": { "branch": "master", "commit": "2795c26c916bb3c57dde308b82be51971fa92747" },
+  "plenary.nvim": { "branch": "master", "commit": "74b06c6c75e4eeb3108ec01852001636d85a932b" },
+  "snacks.nvim": { "branch": "main", "commit": "ad9ede6a9cddf16cedbd31b8932d6dcdee9b716e" },
+  "trouble.nvim": { "branch": "main", "commit": "bd67efe408d4816e25e8491cc5ad4088e708a69a" },
+  "vim-twig": { "branch": "master", "commit": "ad115512725bcc156f7f89b72ff563b9fa44933b" }
+}

@@ -328,14 +328,24 @@ require("lazy").setup({
                 javascript = { "eslint" },
                 typescript = { "eslint" },
                 php = { "phpcs" },
-                css = { "stylelint" },
-                scss = { "stylelint" },
                 sh = { "shellcheck" }
             }
 
             vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
-                callback = function()
-                    require("lint").try_lint()
+                callback = function(args)
+                    local lint = require("lint")
+                    local filetype = vim.bo[args.buf].filetype
+
+                    -- If it's a style file, dynamically check for stylelint
+                    if filetype == "css" or filetype == "scss" then
+                        local linter = utils.get_style_linter(args.buf)
+                        if linter then
+                            lint.try_lint(linter)
+                        end
+                    else
+                        -- Run default linters for everything else
+                        lint.try_lint()
+                    end
                 end,
             })
         end,

@@ -159,8 +159,9 @@ require("lazy").setup({
                     -- We extend a standard OpenAI-compatible adapter but override the URL
                     return require("codecompanion.adapters").extend("openai_compatible", {
                         env = {
-                            -- Pointing exactly to your Shadow Node loopback from your openclaw.json
-                            url = "http://127.0.0.1:18789",
+                            -- Strictly requires environment variables. No fallbacks.
+                            url = os.getenv("OPENCLAW_URL"),
+                            api_key = os.getenv("OPENCLAW_TOKEN")
                         },
                         schema = {
                             model = {

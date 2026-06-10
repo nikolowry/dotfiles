@@ -1,21 +1,18 @@
 {
-  "typescript": {
-  },
+  "useTabs": false,
+  "indentWidth": 4,
+  "dockerfile": {},
+  "graphql": {},
   "json": {
+    "indentWidth": 2
   },
-  "markdown": {
-  },
-  "toml": {
-  },
-  "dockerfile": {
-  },
-  "malva": {
-  },
-  "markup": {
-  },
+  "toml": {},
+  "typescript": {},
+  "malva": {},
+  "markdown": {},
+  "markup": {},
   "yaml": {
-  },
-  "graphql": {
+    "indentWidth": 2
   },
   "excludes": [
     "**/node_modules",

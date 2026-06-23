@@ -293,7 +293,7 @@ require("lazy").setup({
                 typescript = utils.get_js_formatter,
                 javascriptreact = utils.get_js_formatter,
                 typescriptreact = utils.get_js_formatter,
-                php = { "phpcbf" },
+                php = utils.get_php_formatter,
                 json = { "dprint" },
                 markdown = { "dprint" },
                 css = { "dprint" },
@@ -309,6 +309,19 @@ require("lazy").setup({
             formatters = {
                 shfmt = {
                     prepend_args = { "-i", "4" },
+                },
+                php_cs_fixer = {
+                    prepend_args = function(self, ctx)
+                        local dirname = vim.fs.dirname(ctx.filename)
+                        local project_cfg = vim.fs.find(
+                            { ".php-cs-fixer.dist.php", ".php-cs-fixer.php" },
+                            { upward = true, path = dirname }
+                        )[1]
+                        if project_cfg then
+                            return {}
+                        end
+                        return { "--config=" .. vim.fn.expand("~/.config/php-cs-fixer/config.php") }
+                    end,
                 },
             },
             format_on_save = {
@@ -328,7 +341,6 @@ require("lazy").setup({
             require('lint').linters_by_ft = {
                 javascript = { "eslint" },
                 typescript = { "eslint" },
-                php = { "phpcs" },
                 sh = { "shellcheck" }
             }
 
@@ -340,6 +352,11 @@ require("lazy").setup({
                     -- If it's a style file, dynamically check for stylelint
                     if filetype == "css" or filetype == "scss" then
                         local linter = utils.get_style_linter(args.buf)
+                        if linter then
+                            lint.try_lint(linter)
+                        end
+                    elseif filetype == "php" then
+                        local linter = utils.get_php_linter(args.buf)
                         if linter then
                             lint.try_lint(linter)
                         end

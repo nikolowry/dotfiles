@@ -10,6 +10,35 @@ local function has_config(filenames, dirname)
     return vim.fs.find(filenames, { upward = true, path = dirname })[1] ~= nil
 end
 
+local function project_owns_phpcs(dirname)
+    return has_config({ "phpcs.xml", "phpcs.xml.dist", ".phpcs.xml", ".phpcs.xml.dist" }, dirname)
+        or has_config({ "vendor/bin/phpcs" }, dirname)
+end
+
+local function project_owns_php_cs_fixer(dirname)
+    return has_config({ ".php-cs-fixer.dist.php", ".php-cs-fixer.php" }, dirname)
+        or has_config({ "vendor/bin/php-cs-fixer" }, dirname)
+end
+
+M.get_php_formatter = function(bufnr)
+    local dirname = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr))
+    if project_owns_phpcs(dirname) then
+        return { "phpcbf" }
+    end
+    return { "php_cs_fixer" }  -- covers both project-owned and global default
+end
+
+M.get_php_linter = function(bufnr)
+    local dirname = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr))
+    if project_owns_phpcs(dirname) then
+        return { "phpcs" }
+    end
+    if has_config({ "phpstan.neon", "phpstan.neon.dist", "phpstan.dist.neon" }, dirname) then
+        return { "phpstan" }
+    end
+    return nil  -- no linter when no project signal
+end
+
 M.get_js_formatter = function(bufnr)
     local dirname = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr))
 

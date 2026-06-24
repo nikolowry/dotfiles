@@ -3,5 +3,6 @@
 .DS_Store
 .ccls-cache
 .phpactor.json
+.php-cs-fixer.cache
 .scratch/
 repomix-output.xml

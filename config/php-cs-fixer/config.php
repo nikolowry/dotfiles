@@ -11,6 +11,8 @@
  *     --config=~/.config/php-cs-fixer/config.php --diff
  */
 
+use PhpCsFixer\Config\RuleCustomisationPolicyInterface;
+
 // Walk upward from cwd looking for composer.json. @auto reads that file
 // to determine target PHP version; without it, @auto throws hard.
 $findComposerJson = static function (string $startDir): ?string {
@@ -41,6 +43,29 @@ $baseRuleset = $findComposerJson(getcwd()) !== null
 // editor is operating in, not the dotfiles dir containing this file.
 $finder = (new PhpCsFixer\Finder())->in(getcwd());
 
+/**
+ * Skip statement_indentation on files that mix PHP with HTML.
+ * Detected by presence of a `?>` closing tag — PSR-12 forbids closing
+ * tags in pure PHP files, so any file containing one is a template.
+ */
+final class TemplateAwarePolicy implements RuleCustomisationPolicyInterface {
+    public function getPolicyVersionForCache(): string {
+        return hash_file(\PHP_VERSION_ID >= 8_01_00 ? 'xxh128' : 'md5', __FILE__);
+    }
+
+    public function getRuleCustomisers(): array {
+        return [
+            'statement_indentation' => static function (\SplFileInfo $file) {
+                $content = @file_get_contents($file->getPathname());
+                if ($content === false) {
+                    return true;
+                }
+                return str_contains($content, '?>') ? false : true;
+            },
+        ];
+    }
+}
+
 return (new PhpCsFixer\Config())
     ->setRules([
         $baseRuleset => true,
@@ -49,6 +74,11 @@ return (new PhpCsFixer\Config())
 
         // Collapse aligned `=>` to single-space separators.
         'binary_operator_spaces' => ['default' => 'single_space'],
+
+        'braces_position' => [
+            'functions_opening_brace' => 'same_line',
+            'classes_opening_brace' => 'same_line',  // see note below
+        ],
 
         // Strip padding inside array offsets: $foo[ $bar ] -> $foo[$bar]
         'no_spaces_around_offset' => ['positions' => ['inside', 'outside']],
@@ -72,6 +102,7 @@ return (new PhpCsFixer\Config())
             'elements' => ['arrays', 'arguments', 'parameters', 'match'],
         ],
     ])
+    ->setRuleCustomisationPolicy(new TemplateAwarePolicy())
     ->setFinder($finder)
     // @auto includes risky rules — changes that may alter runtime behavior
     // (typed-property null inference, native function escaping, etc.) not

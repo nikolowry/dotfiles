@@ -98,9 +98,9 @@ return (new PhpCsFixer\Config())
         // Trailing commas in every multi-line structure so adding,
         // removing, or reordering lines is always a single-line edit.
         // @PER-CS only does this for arrays by default.
-        'trailing_comma_in_multiline' => [
-            'elements' => ['arrays', 'arguments', 'parameters', 'match'],
-        ],
+        //'trailing_comma_in_multiline' => [
+        //    'elements' => ['arrays', 'arguments', 'parameters', 'match'],
+        //],
     ])
     ->setRuleCustomisationPolicy(new TemplateAwarePolicy())
     ->setFinder($finder)

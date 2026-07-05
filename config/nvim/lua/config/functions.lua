@@ -42,6 +42,11 @@ end
 M.get_js_formatter = function(bufnr)
     local dirname = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr))
 
+    -- 0. Deno Workspace (Highest Priority)
+    if has_config({ "deno.json", "deno.jsonc" }, dirname) then
+        return { "deno_fmt" }
+    end
+
     -- 1. Bleeding Edge: Oxc
     if has_config({ "oxlint.json", ".oxlintrc", ".oxlintrc.json" }, dirname) then
         return { "oxc" }
@@ -64,6 +69,16 @@ M.get_js_formatter = function(bufnr)
 
     -- 5. Greenfield/Dictator Fallback: Dprint
     return { "dprint" }
+end
+
+M.get_js_linter = function(bufnr)
+    local dirname = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr))
+
+    if has_config({ "deno.json", "deno.jsonc" }, dirname) then
+        return { "deno" }
+    end
+
+    return { "eslint" } -- Fallback to your legacy agency default
 end
 
 M.get_style_linter = function(bufnr)

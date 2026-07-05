@@ -325,7 +325,7 @@ require("lazy").setup({
                 },
             },
             format_on_save = {
-                timeout_ms = 500,
+                timeout_ms = 1000,
                 lsp_fallback = true,
             },
         },
@@ -339,8 +339,6 @@ require("lazy").setup({
         config = function()
             -- ESLint exists strictly as a diagnostic reader
             require('lint').linters_by_ft = {
-                javascript = { "eslint" },
-                typescript = { "eslint" },
                 sh = { "shellcheck" }
             }
 
@@ -360,6 +358,10 @@ require("lazy").setup({
                         if linter then
                             lint.try_lint(linter)
                         end
+                    elseif filetype == "javascript" or filetype == "typescript" then
+                        -- Use our new dynamic JS linter
+                        local linter = utils.get_js_linter(args.buf)
+                        if linter then lint.try_lint(linter) end
                     else
                         -- Run default linters for everything else
                         lint.try_lint()
@@ -436,7 +438,7 @@ require("lazy").setup({
 -- ==========================================
 local servers = {
     "phpactor", "lua_ls", "jsonls", "clangd", "dockerls",
-    "gopls", "graphql", "pylsp", "eslint", "ts_ls", "vimls", "yamlls"
+    "gopls", "graphql", "pylsp", "eslint", "vimls", "yamlls"
 }
 
 for _, server in ipairs(servers) do
@@ -451,6 +453,23 @@ for _, server in ipairs(servers) do
 
     vim.lsp.enable(server)
 end
+
+-- ==========================================
+-- DENO VS TYPESCRIPT TURF WAR RESOLUTION
+-- ==========================================
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = { "javascript", "typescript", "javascriptreact", "typescriptreact" },
+    callback = function(args)
+        local dirname = vim.fn.expand("%:p:h")
+        local is_deno = vim.fs.find({ "deno.json", "deno.jsonc" }, { upward = true, path = dirname })[1]
+
+        if is_deno then
+            vim.lsp.enable("denols")
+        else
+            vim.lsp.enable("ts_ls")
+        end
+    end,
+})
 
 vim.diagnostic.config({
     virtual_text = false,

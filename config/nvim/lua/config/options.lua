@@ -14,6 +14,7 @@ opt.ignorecase = true
 opt.smartcase = true
 opt.showmatch = true
 opt.colorcolumn = "80"
+opt.timeoutlen = 3000
 
 -- Netrw tweaks
 vim.g.netrw_banner = 0
@@ -49,3 +50,9 @@ vim.lsp.inlay_hint.enable(false)
 
 -- Hide the '~' at the end of the buffer
 vim.opt.fillchars:append({ eob = " " })
+
+-- Lazy git
+vim.api.nvim_create_user_command("Lg", function() Snacks.lazygit() end, {})
+
+-- Fuzzy finder
+vim.api.nvim_create_user_command("Ff", function() Snacks.picker.files() end, {})

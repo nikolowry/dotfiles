@@ -81,6 +81,27 @@ M.get_js_linter = function(bufnr)
     return { "eslint" } -- Fallback to your legacy agency default
 end
 
+M.get_style_formatter = function(bufnr)
+    local dirname = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr))
+
+    local stylelint_configs = {
+        ".stylelintrc",
+        ".stylelintrc.json",
+        ".stylelintrc.yaml",
+        ".stylelintrc.yml",
+        ".stylelintrc.js",
+        "stylelint.config.js",
+        "stylelint.config.cjs"
+    }
+
+    if has_config(stylelint_configs, dirname) then
+        return { "stylelint" }
+    end
+
+    -- Return nil (Lua's null) to indicate no formatter should run
+    return { 'dprint' }
+end
+
 M.get_style_linter = function(bufnr)
     local dirname = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr))
 

@@ -107,7 +107,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
         vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 
         -- Native Code Actions
-        vim.keymap.set({"n", "v"}, "<leader>ca", vim.lsp.buf.code_action, opts)
+        vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, opts)
 
         -- Diagnostic Jumping (Restoring your muscle memory)
         vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, opts)
@@ -167,4 +167,29 @@ vim.filetype.add({
     pattern = {
         [".*%.html%.twig"] = "twig",
     },
+})
+
+-- Neovim creates an empty unnamed buffer at startup. When you launch on a
+-- directory, the explorer opens in a new buffer and the empty one is left
+-- in the buffer list, where it collects stray yanks and paste targets.
+-- Delete it once anything real is loaded.
+vim.api.nvim_create_autocmd("BufEnter", {
+    group = vim.api.nvim_create_augroup("kill_empty_noname", { clear = true }),
+    callback = function()
+        local current = vim.api.nvim_get_current_buf()
+
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+            local is_empty_scratch = vim.api.nvim_buf_is_loaded(buf)
+                and buf ~= current
+                and vim.api.nvim_buf_get_name(buf) == ""
+                and vim.bo[buf].buftype == ""
+                and vim.bo[buf].modified == false
+                and vim.api.nvim_buf_line_count(buf) == 1
+                and vim.api.nvim_buf_get_lines(buf, 0, 1, false)[1] == ""
+
+            if is_empty_scratch then
+                pcall(vim.api.nvim_buf_delete, buf, {})
+            end
+        end
+    end,
 })

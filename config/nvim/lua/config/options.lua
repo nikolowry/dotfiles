@@ -51,8 +51,14 @@ vim.lsp.inlay_hint.enable(false)
 -- Hide the '~' at the end of the buffer
 vim.opt.fillchars:append({ eob = " " })
 
+-- Find Files
+vim.api.nvim_create_user_command("Ff", function() Snacks.picker.files() end, {})
+
+-- Find OOP Symbols
+vim.api.nvim_create_user_command("Fs", function() Snacks.picker.files() end, {})
+
+-- Live Grep
+vim.api.nvim_create_user_command("Sp", function() Snacks.picker.files() end, {})
+
 -- Lazy git
 vim.api.nvim_create_user_command("Lg", function() Snacks.lazygit() end, {})
-
--- Fuzzy finder
-vim.api.nvim_create_user_command("Ff", function() Snacks.picker.files() end, {})

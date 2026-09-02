@@ -20,7 +20,8 @@ vim.opt.rtp:prepend(lazypath)
 
 require("config.options")
 require("config.autocmds")
-local utils = require("config.functions") -- Bring in your DRY helpers
+
+local utils = require("config.functions") -- DRY helpers
 
 -- 2. Setup Plugins
 require("lazy").setup({
@@ -53,6 +54,9 @@ require("lazy").setup({
             })
         end,
     },
+    -- nvim-lspconfig ships the lsp/*.lua configs that vim.lsp.enable() resolves.
+    -- No setup() call, no opts — it's data on the runtimepath, not a runtime plugin.
+    { "neovim/nvim-lspconfig" },
     -- ==========================================
     -- 4. THE ENGINE: Autocompletion (blink.cmp)
     -- ==========================================
@@ -125,7 +129,7 @@ require("lazy").setup({
         },
         keys = {
             -- Picker Keymaps (Bottom Split)
-            { "<leader>f",       function() Snacks.picker.files() end,                 desc = "Find Files" },
+            { "<leader>ff",      function() Snacks.picker.files() end,                 desc = "Find Files" },
             { "<leader>fs",      function() Snacks.picker.lsp_workspace_symbols() end, desc = "Find OOP Symbols" },
             { "<leader>sp",      function() Snacks.picker.grep() end,                  desc = "Live Grep" },
             { "<leader><space>", function() Snacks.picker.buffers() end,               desc = "Buffers" },
@@ -275,8 +279,8 @@ require("lazy").setup({
         },
         keys = {
             { "<leader>e", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Document Diagnostics" },
-            { "<leader>x", "<cmd>Trouble diagnostics toggle<cr>", desc = "Workspace Diagnostics" },
-            { "gr", "<cmd>Trouble lsp_references toggle<cr>", desc = "LSP References (Trouble)" },
+            { "<leader>x", "<cmd>Trouble diagnostics toggle<cr>",              desc = "Workspace Diagnostics" },
+            { "gr",        "<cmd>Trouble lsp_references toggle<cr>",           desc = "LSP References (Trouble)" },
         },
     },
     -- ==========================================
@@ -294,10 +298,10 @@ require("lazy").setup({
                 javascriptreact = utils.get_js_formatter,
                 typescriptreact = utils.get_js_formatter,
                 php = utils.get_php_formatter,
+                css = utils.get_style_formatter,
+                scss = utils.get_style_formatter,
                 json = { "dprint" },
                 markdown = { "dprint" },
-                css = { "dprint" },
-                scss = { "dprint" },
                 html = { "dprint" },
                 vue = { "dprint" },
                 graphql = { "dprint" },
@@ -324,10 +328,12 @@ require("lazy").setup({
                     end,
                 },
             },
-            format_on_save = {
-                timeout_ms = 1000,
-                lsp_fallback = true,
-            },
+            format_on_save = function(bufnr)
+                if vim.g.disable_autoformat or vim.b[bufnr].disable_autoformat then
+                    return
+                end
+                return { timeout_ms = 1000, lsp_format = "fallback" }
+            end,
         },
         keys = {
             { "<leader>F", function() require("conform").format() end, desc = "Format Buffer" },
@@ -377,7 +383,7 @@ require("lazy").setup({
         "lumiliet/vim-twig",
         ft = { "twig", "html.twig" } -- Strictly lazy-load ONLY when opening a Twig file
     },
--- ==========================================
+    -- ==========================================
     -- QUALITY OF LIFE & WORKFLOW
     -- ==========================================
 
@@ -438,7 +444,7 @@ require("lazy").setup({
 -- ==========================================
 local servers = {
     "phpactor", "lua_ls", "jsonls", "clangd", "dockerls",
-    "gopls", "graphql", "pylsp", "eslint", "vimls", "yamlls"
+    "gopls", "graphql", "pylsp", "vimls", "yamlls"
 }
 
 for _, server in ipairs(servers) do
@@ -471,6 +477,20 @@ vim.api.nvim_create_autocmd("FileType", {
     end,
 })
 
+-- ==========================================
+-- :FormatToggle
+-- ==========================================
+vim.api.nvim_create_user_command("FormatToggle", function(a)
+    if a.bang then
+        vim.b.disable_autoformat = not vim.b.disable_autoformat
+    else
+        vim.g.disable_autoformat = not vim.g.disable_autoformat
+    end
+end, { bang = true })
+
+-- ==========================================
+-- :Diagnostics
+-- ==========================================
 vim.diagnostic.config({
     virtual_text = false,
     signs = true,

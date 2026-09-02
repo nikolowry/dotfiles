@@ -9,3 +9,12 @@ fi
 if [[ -f "$HOME/.orbstack/shell/init.zsh" ]]; then
     source "$HOME/.orbstack/shell/init.zsh" 2>/dev/null || :
 fi
+
+# SMB mount daemon (macOS only — replaces failed launchctl attempt)
+if [[ "$OSTYPE" == "darwin"* ]] &&
+        [[ -x "$HOME/.local/bin/mount-development.sh" ]]; then
+    if ! pgrep -f "mount-development.sh" > /dev/null 2>&1; then
+        nohup "$HOME/.local/bin/mount-development.sh" >> /tmp/mount-development.log 2>&1 &
+        disown
+    fi
+fi

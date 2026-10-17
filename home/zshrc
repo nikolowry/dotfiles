@@ -34,3 +34,17 @@ if [[ -f "$HOME/.last_dir" ]]; then
     last_dir="$(cat "$HOME/.last_dir")"
     [[ -n "$last_dir" && -d "$last_dir" ]] && cd "$last_dir"
 fi
+
+# OpenClaw Completion
+[ -f "/Users/neeks/.openclaw/completions/openclaw.zsh" ] &&
+    source "/Users/neeks/.openclaw/completions/openclaw.zsh"
+
+# Hermes Agent command
+case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
+
+# Docker completions
+if [[ -f "$HOME/.docker/completions/" ]]; then
+    fpath=(/Users/neeks/.docker/completions $fpath)
+    autoload -Uz compinit
+    (( ${+_comps[docker]} )) || compinit
+fi;

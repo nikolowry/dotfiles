@@ -39,7 +39,7 @@ fi
 [ -f "/Users/neeks/.openclaw/completions/openclaw.zsh" ] &&
     source "/Users/neeks/.openclaw/completions/openclaw.zsh"
 
-# Hermes Agent command
+# User scripts and binaries (saxby, mount-development, openclaw-vision)
 case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
 
 # Docker completions

@@ -1,5 +1,5 @@
-background-opacity = 0.9
-font-thicken = true
+background-opacity = 0.85
+font-thicken = false
 gtk-titlebar-style = tabs
 keybind = ctrl+shift+c=copy_to_clipboard:plain
 macos-titlebar-style=tabs

@@ -25,7 +25,7 @@ M.get_php_formatter = function(bufnr)
     if project_owns_phpcs(dirname) then
         return { "phpcbf" }
     end
-    return { "php_cs_fixer" }  -- covers both project-owned and global default
+    return { "php_cs_fixer" } -- covers both project-owned and global default
 end
 
 M.get_php_linter = function(bufnr)
@@ -36,7 +36,7 @@ M.get_php_linter = function(bufnr)
     if has_config({ "phpstan.neon", "phpstan.neon.dist", "phpstan.dist.neon" }, dirname) then
         return { "phpstan" }
     end
-    return nil  -- no linter when no project signal
+    return nil -- no linter when no project signal
 end
 
 M.get_js_formatter = function(bufnr)
@@ -95,7 +95,7 @@ M.get_style_formatter = function(bufnr)
     }
 
     if has_config(stylelint_configs, dirname) then
-        return { "stylelint" }
+        return {}  --"stylelint" }
     end
 
     -- Return nil (Lua's null) to indicate no formatter should run

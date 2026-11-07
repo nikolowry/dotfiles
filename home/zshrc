@@ -20,10 +20,6 @@ compinit
 [[ -s "$HOME/.zprezto/init.zsh" ]] &&
     source "$HOME/.zprezto/init.zsh"
 
-# openclaw completions
-[[ -s "$HOME/.openclaw/completions/openclaw.zsh" ]] &&
-    source "$HOME/.openclaw/completions/openclaw.zsh"
-
 # Write to ~/.last_dir whenever the directory changes
 chpwd() {
     pwd >! "$HOME/.last_dir"
@@ -34,13 +30,6 @@ if [[ -f "$HOME/.last_dir" ]]; then
     last_dir="$(cat "$HOME/.last_dir")"
     [[ -n "$last_dir" && -d "$last_dir" ]] && cd "$last_dir"
 fi
-
-# OpenClaw Completion
-[ -f "/Users/neeks/.openclaw/completions/openclaw.zsh" ] &&
-    source "/Users/neeks/.openclaw/completions/openclaw.zsh"
-
-# User scripts and binaries (saxby, mount-development, openclaw-vision)
-case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
 
 # Docker completions
 if [[ -f "$HOME/.docker/completions/" ]]; then

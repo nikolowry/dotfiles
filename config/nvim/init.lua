@@ -152,38 +152,29 @@ require("lazy").setup({
             "nvim-lua/plenary.nvim",
         },
         opts = {
-            strategies = {
-                -- Route all AI actions to your custom local adapter
-                chat = { adapter = "openclaw" },
-                inline = { adapter = "openclaw" },
-                agent = { adapter = "openclaw" },
+            interactions = {
+                chat = { adapter = "aster" },
             },
             adapters = {
-                openclaw = function()
-                    -- We extend a standard OpenAI-compatible adapter but override the URL
-                    return require("codecompanion.adapters").extend("openai_compatible", {
-                        env = {
-                            -- Strictly requires environment variables. No fallbacks.
-                            url = os.getenv("OPENCLAW_URL"),
-                            api_key = os.getenv("OPENCLAW_TOKEN")
-                        },
-                        schema = {
-                            model = {
-                                -- Defining your local S-Tier model
-                                default = "qwen3-coder-next:latest",
+                acp = {
+                    aster = function()
+                        return require("codecompanion.adapters").extend("opencode", {
+                            name = "aster",
+                            formatted_name = "Aster",
+                            commands = {
+                                default = { os.getenv('HOME') .. "/.local/bin/aster", "acp" },
                             },
-                        },
-                    })
-                end,
+                        })
+                    end,
+                },
             },
             display = {
-                -- Keep the chat in a clean vertical split, acting like a true sidebar assistant
                 chat = { window = { layout = "vertical", width = 0.3 } },
             },
         },
         keys = {
-            { "<leader>cc", "<cmd>CodeCompanionChat Toggle<cr>", desc = "Toggle OpenClaw AI Chat" },
-            { "<leader>ca", "<cmd>CodeCompanionActions<cr>",     desc = "OpenClaw AI Actions" },
+            { "<leader>cc", "<cmd>CodeCompanionChat Toggle<cr>", desc = "Toggle AI Chat" },
+            { "<leader>ca", "<cmd>CodeCompanionActions<cr>",     desc = "AI Actions" },
         },
     },
     -- ==========================================

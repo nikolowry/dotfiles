@@ -1,4 +1,12 @@
+# The following lines were added by Docker Desktop to add commands to your PATH.
+export PATH="$PATH:/Users/neeks/.docker/bin"
+# End of Docker Desktop section.
+
 # ~/.zprofile
+
+# Mac Agent Vision Flag
+# Persistent RDP takes up too much compute, park for now
+MAC_AGENT_VISION=
 
 # macOS Homebrew
 if [[ -f "/opt/homebrew/bin/brew" ]]; then
@@ -7,8 +15,6 @@ fi
 
 # macOS only
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    # Docker Desktop
-    export PATH="$PATH:$HOME/.docker/bin"
 
     # SMB mount daemon (macOS only — replaces failed launchctl attempt)
     if [[ -x "$HOME/.local/bin/mount-development" ]] &&
@@ -17,15 +23,16 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         disown
     fi
 
-    # OpenClaw Vision
-    if [[ -x "$HOME/.local/bin/launch-openclaw-vision" ]] &&
-            [[ ! $(pgrep -f "launch-openclaw-vision") ]]; then
-        nohup "$HOME/.local/bin/launch-openclaw-vision" \
-            >> "$HOME/Library/Logs/openclaw-vision.log" 2>&1 &
+    # Agent Vision (parked: MAC_AGENT_VISION is empty)
+    if [[ "$MAC_AGENT_VISION" ]] &&
+            [[ -x "$HOME/.local/bin/launch-agent-vision" ]] &&
+            [[ ! $(pgrep -f "launch-agent-vision") ]]; then
+        nohup "$HOME/.local/bin/launch-agent-vision" \
+            >> "$HOME/Library/Logs/agent-vision.log" 2>&1 &
 
         disown
     fi
 fi
 
-# User scripts and binaries (saxby, mount-development, openclaw-vision)
+# User scripts and binaries (saxby, mount-development, agent-vision)
 case ":$PATH:" in *":$HOME/.local/bin:"*) ;; *) export PATH="$HOME/.local/bin:$PATH" ;; esac
